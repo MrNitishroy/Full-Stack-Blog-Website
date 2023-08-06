@@ -125,11 +125,10 @@ const blogDataList = [
 
 function BlogPage() {
   const [blogData, setBlogData] = useState([]);
-
   const fetchBlog = async () => {
     try {
       const response = await fetch(
-        "https://localhost:7136/api/Post/GetAllPosts"
+        "https://localhost:7084/api/Post/GetAllPost"
       );
       if (!response.ok) {
         console.log("Network response was not ok");
@@ -144,7 +143,7 @@ function BlogPage() {
 
   useEffect(() => {
     fetchBlog();
-  }, []);
+  }, []); 
 
   const onClickCol = () => {
     console.log("jsdfh hf sdkaf sdkfadf");
@@ -167,25 +166,23 @@ function BlogPage() {
             }}
             justify={"space-between"}
           >
-            {blogDataList.map((e) => (
+            {blogData.map((e) => (
               <Col
                 className="gutter-row blog "
                 span={8}
                 style={{ cursor: "pointer" }}
               >
                 <Link to={"/SinglePost"}>
-                  <img src={e.thumnails} className="Thumnails" />
+                  <img src={e.coverImage} className="Thumnails" />
                   <div className="BlogCard">
                     <div className="category">CATEGORY</div>
                     <h3 className="blogTitle">{e.title}</h3>
                     <p className="subTitle">{e.subtitle}</p>
                     <Row align={"middle"} justify={"space-between"}>
                       <Row align={"middle"} className="metaDiscription">
-                        {" "}
                         <div className="circle"> </div> By : {e.author}
                       </Row>
                       <Row align={"middle"} className="metaDiscription">
-                        {" "}
                         <div className="circle"> </div> On :{e.date}
                       </Row>
                     </Row>

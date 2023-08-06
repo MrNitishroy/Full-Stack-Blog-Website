@@ -16,3 +16,35 @@
 .postList{
     padding: 40px 190px;
 }
+
+.postCOver{
+    width: 100px;
+    height: 100px
+}
+.postBox{
+    margin: 30px;
+   
+}
+.postList{
+    /* gap: 20px; */
+    margin: 20px;
+    /* background-color: aqua; */
+}
+
+.postt{
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Limit the number of lines to 2 */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 700px; /* Set the maximum width to 200 pixels */
+    /* Add any other styles you want for the title here */
+}
+.del{
+    height: 50px;
+    background-color: grey;
+    color: white;
+    border-radius: 10px;
+    padding: 10px 50px;
+    border: none\   ;
+}

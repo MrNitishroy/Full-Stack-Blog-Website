@@ -1,4 +1,4 @@
-import { Col, Row, Tag, Rate } from "antd";
+import { Col, Row, Tag, Rate, Form, message } from "antd";
 import "./SingleStylePost.css";
 import { FrownOutlined, MehOutlined, SmileOutlined } from "@ant-design/icons";
 import coverImage from "../../assets/blog/blog19.jpg";
@@ -7,14 +7,16 @@ import share from "../../assets/icons/share.png";
 import like from "../../assets/icons/LIKE.png";
 import comment from "../../assets/icons/comment.png";
 import view from "../../assets/icons/view.png";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import SidebarSear from "./widgts/sidebarSearchBar";
 import ConnectWithUs from "./widgts/ConnectWithUs";
 import Category from "./widgts/Category";
 import CommentSection from "./widgts/CommentSection";
 import ContactSection from "../Contact/ContactCom";
 import ImportPageList from "./widgts/ImportPageList";
-import { useEffect } from "react";
+import compic from "../../assets/blog/blog1.jpg"
+import { useEffect, useState } from "react";
 const customIcons = {
   1: <FrownOutlined size={"400px"} />,
   2: <FrownOutlined />,
@@ -22,42 +24,98 @@ const customIcons = {
   4: <SmileOutlined />,
   5: <SmileOutlined />,
 };
-
-const onPrint=()=>
-{
+var commentList = [
+  {
+    name: "Nitish kumar",
+    comment: "this is bahut achha website hai",
+    time: "10 hours ago",
+    profileUrl: "",
+  },
+  {
+    name: "Rishi kumar",
+    comment: "this is bahut achha website hai",
+    time: "10 hours ago",
+    profileUrl: "pic2",
+  },
+  {
+    name: "Vikash kumar",
+    comment: "this is bahut achha website hai",
+    time: "10 hours ago",
+    profileUrl: "pic3",
+  },
+  {
+    name: "Saloni kumar",
+    comment: "this is bahut achha website hai",
+    time: "10 hours ago",
+    profileUrl: "pic4",
+  },
+];
+const onPrint = () => {
   window.print();
   print("print");
-}
+};
+
 function SinglePost() {
+  const [comment, SetComment] = useState();
   const location = useLocation();
-  const blogData = location.blogData;
+  const blogData = location.state;
+  const Tags = blogData.tags;
+  const Comments = blogData.comments;
+  function addComment(e) {
+    SetComment({
+      userName: e.name,
+      comment: e.comment,
+    });
+    const encodedBlogId = encodeURIComponent(blogData.id);
+    fetch(`https://localhost:7084/api/Post/Add%20Comment?id=${encodedBlogId}`, {
+      method: "POST",
+      headers: {
+        Accept: "text/plain",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(comment),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to add comment"); // Handle error response here
+        }
+        return response.text(); // If you expect a text response
+      })
+      .then((data) => {
+        message.success("Comment added");
+        console.log(`blog id : ${blogData.id} `);
+        console.log(`user Name : ${e.name} `);
+        console.log(`blog comment : ${e.comment} `);
+      })
+      .catch((error) => {
+        console.error(error);
+        // Handle the error here (e.g., show an error message to the user)
+      });
+    message.success("Comment added");
+  }
 
-
-  useEffect(()=>{
-    console.log(blogData);
-  })
   return (
     <>
       <Row className="SinglePost" justify={"space-between"}>
         <Col span={15}>
           <img
-            src={coverImage}
+            src={blogData.coverImage}
             width={860}
             height={400}
             className="CoverImage"
+            key={blogData.id}
           />
           <Col className="PostDetails" span={24}>
-            <h1 className="BlogHeading">
-            Neeon - WordPress News Magazine Theme
-            </h1>
+            <h1 className="BlogHeading">{blogData.title}</h1>
             <Row justify={"space-between"} className="IconBox">
               <Row align={"middle"}>
                 <Row align={"top"} justify={"center"} to="">
                   <div className="IconDIv">
-                    <img className="Icons" src={like} width={18} /> 200
+                    <img className="Icons" src={like} width={18} />{" "}
+                    {blogData.likes}
                   </div>
                 </Row>
-                
+
                 <Row align={"top"} justify={"center"} to="">
                   <div className="IconDIv">
                     <img className="Icons" src={comment} width={18} /> 200
@@ -65,77 +123,116 @@ function SinglePost() {
                 </Row>
                 <Row align={"top"} justify={"center"} to="">
                   <div className="IconDIv">
-                    <img className="Icons" src={view} width={18} /> 200
+                    <img className="Icons" src={view} width={18} />{" "}
+                    {blogData.views}
                   </div>
                 </Row>
               </Row>
-             
-              <Row align={"middle"} >
-              <Rate className="Icons" 
-              defaultValue={4}
-              character={({ index }) => customIcons[index + 1]}
-            />
+
+              <Row align={"middle"}>
+                <Rate
+                  className="Icons"
+                  defaultValue={blogData.rating}
+                  character={({ index }) => customIcons[index + 1]}
+                />
                 <Link to="">
                   <img className="Icons" src={share} width={18} height={18} />
                 </Link>
-             
-                  <img className="Icons" src={print} width={18} height={18} onClick={onPrint} />{" "}
-             
+                <img
+                  className="Icons"
+                  src={print}
+                  width={18}
+                  height={18}
+                  onClick={onPrint}
+                />{" "}
               </Row>
             </Row>
-            <p>
-              Ahen an unknown printer took a galley of type and their scrambled
-              imaketype specimen book has follorrvived not only fiver
-              centuriewhen an unknown printer took a galley of type and
-              scrambled it to make a type specimen book. It has survived not
-              only five centuries but also the leap into electronic typesetting,
-              remaining essentially unchanged.
-            </p>
-
-            <p>
-              Travel orem Ipsum has been the industry’s standard dummy text ever
-              since the 1500s, when an unknown printer took a gallery Followe
-              yof type and scrambled it to make a type specimen book. It has
-              survived not only five centuries, but also the leap into
-              electronics are o nic typesetting, remaining essentially
-              unchanged.
-            </p>
-
-            <p>
-              Mravel orem Ipsum has been the industry’s standard dummy text ever
-              since the 1500s, when an unknown printer took a galleyof typed
-              scrambled it to make a type specimen book. It has survived not
-              only five centuries, but also the leap into electro nic
-              typesetting, remain ing essentially unchanged.
-            </p>
-            <h1>Middle Post Heading</h1>
-            <p>
-              Our should never complain, complaining is a weak emotion, you got
-              life, we breathing, we blessed. Surround yourself with angels.
-              They never said winning was easy. Some people can’t handle
-              success, I can. Look at the sunset, life is amazing, life is
-              beautiful, life is what A federal government initiated report
-              conducted by the.
-            </p>
+            {blogData.description}
             <Row>
               <div className="has">#</div>
               <div className="tags">Tags : </div>
             </Row>
             <Row>
-              <Tag color="success">AI</Tag>
-              <Tag color="processing">Blog</Tag>
-              <Tag color="error">Tech news</Tag>
-              <Tag color="warning">Unboxing</Tag>
-              <Tag color="error">error</Tag>
-              <Tag color="warning">warning</Tag>
+              {Tags == null ? (
+                <div></div>
+              ) : (
+                Tags.map((e) => <Tag color="error">{e}</Tag>)
+              )}
             </Row>
           </Col>
-          {/* <Row justify={"center"} className="RateBox">
-            
-          </Row> */}
-          <CommentSection />
-        </Col>
 
+          {/* Comment start */}
+          <Row className="commentMainBox" justify={"center"} align={"middle"}>
+            <Col style={{ width: "100%" }} className="commentBox" span={18}>
+              <h2 className="LargeHeading">Comment ❤️ </h2>
+              <br />
+              <Form
+                name="CommentForm"
+                onFinish={addComment}
+                // onFinishFailed={onFinishFailed}
+                autoComplete="off"
+              >
+                <Form.Item
+                  name="name"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please Name ",
+                    },
+                  ]}
+                >
+                  <input
+                    className="CommentName"
+                    type="text"
+                    placeholder="Name"
+                  />
+                </Form.Item>
+                <Form.Item
+                  name="comment"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Empaty Comment ",
+                    },
+                  ]}
+                >
+                  <textarea
+                    className="TextField message"
+                    placeholder="Write comment . .  "
+                    type="email"
+                  />
+                </Form.Item>
+                <br />
+                <br />
+                <button className="btn"> Comment 📁 </button>
+              </Form>
+              <br />
+              <br />
+              <br />
+              <br />
+              {Comments == null ? (
+                <div></div>
+              ) : (
+                Comments.map((e) => (
+                  <Row className="allCommentBox" align={"middle"}>
+                    <img
+                      className="profilePic"
+                      src={compic}
+                      width={50}
+                      height={50}
+                    />
+                    <Col className="info">
+                      <p className="CommentName">{e.userName}</p>
+                      <p className="Comments">{e.comment}</p>
+                      <p className="Comments">{e.dateTime}</p>
+                    </Col>
+                  </Row>
+                ))
+              )}
+            </Col>
+          </Row>
+        </Col>
+        {/* comment section end */}
         <Col className="SideBar" span={8}>
           <SidebarSear />
           <br></br>

@@ -151,8 +151,6 @@ function BlogSection() {
       <h2 className="LargeHeading">Latest Blog </h2>
       <div className="divider"></div>
       <br></br>
-      <button onClick={onClickCol}>Click</button>
-
       <Row
         gutter={{
           xs: 8,
@@ -162,16 +160,22 @@ function BlogSection() {
         }}
         justify={"space-between"}
       >
-        {blogData == null ? (
-          <div>Not Post</div>
+        {blogData == "" ? (
+          <div className="notFound">
+            
+           Post not found
+            
+            
+            </div>
         ) : (
           blogData.map((e) => (
             <Col
               className="gutter-row blog "
               span={6}
               style={{ cursor: "pointer" }}
+              key={e.id}
             >
-              <Link to={`/SinglePost/${e.id}`} >
+              <Link to={`/SinglePost/${e.title}`} state={e}>
                 <img src={e.coverImage} className="Thumnails" />
                 <div className="BlogCard">
                   <div className="category">CATEGORY</div>

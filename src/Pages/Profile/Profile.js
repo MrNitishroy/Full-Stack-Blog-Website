@@ -12,45 +12,6 @@ function Profile() {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [list, setList] = useState([]);
-
-  const onLoadMore =     () => {
-    setLoading(true);
-    setList(
-      data.concat(
-        [...new Array(count)].map(() => ({
-          loading: true,
-          name: {},
-          picture: {},
-        }))
-      )
-    );
-    fetch(fakeDataUrl)
-      .then((res) => res.json())
-      .then((res) => {
-        const newData = data.concat(res.results);
-        setData(newData);
-        setList(newData);
-        setLoading(false);
-        // Resetting window's offsetTop so as to display react-virtualized demo underfloor.
-        // In real scene, you can using public method of react-virtualized:
-        // https://stackoverflow.com/questions/46700726/how-to-use-public-method-updateposition-of-react-virtualized
-        window.dispatchEvent(new Event("resize"));
-      });
-  };
-  const loadMore =
-    !initLoading && !loading ? (
-      <div
-        style={{
-          textAlign: "center",
-          marginTop: 12,
-          height: 32,
-          lineHeight: "32px",
-        }}
-      >
-        <Button onClick={onLoadMore}>loading more</Button>
-      </div>
-    ) : null;
-
   const [blogData, setBlogData] = useState([]);
   const fetchBlog = async () => {
     try {
@@ -62,7 +23,7 @@ function Profile() {
       }
       const jsonData = await response.json();
       setBlogData(jsonData);
-      console.log(blogData);
+      console.log(blogData); // This will show the previous value of blogData, not the updated one.
     } catch (ex) {
       console.log("Error fetching data:", ex);
     }
@@ -71,6 +32,7 @@ function Profile() {
   useEffect(() => {
     fetchBlog();
   }, []);
+
   return (
     <>
       <Row justify={"center"} className="profilepicBox">
@@ -88,11 +50,13 @@ function Profile() {
           <div className="divider"></div>
         </Col>
       </Row>
-      <div className="postList">
+      <div className="postBox">
         {blogData.map((e) => (
-          <div>
-          
-          </div>
+          <Row justify={"space-between"} className="postList">
+            <img src={e.coverImage} className="postCOver" />
+            <h3 className="postt">{e.title}</h3>
+            <button className="del">Delete</button>
+          </Row>
         ))}
       </div>
     </>
