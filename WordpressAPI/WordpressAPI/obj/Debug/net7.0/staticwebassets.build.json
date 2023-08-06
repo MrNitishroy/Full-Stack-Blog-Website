@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "Qu5DdwsBBTOwhQnyZcQCscOmbjLsLXmXjHxHnSwTZF0=",
+  "Source": "WordpressAPI",
+  "BasePath": "_content/WordpressAPI",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
